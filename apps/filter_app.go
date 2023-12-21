@@ -12,7 +12,7 @@ import (
  * App Interface
  *
  * This interface serves as a shim layer wrapper
- * around the different max-min heap implementaions
+ * around the different max-min heap implementations
  * to provide standardized error handling
  */
 
@@ -73,7 +73,8 @@ func (s *CDSFApp) GetMax() (*filter.FilterItem, error) {
 
 	item := s.heap.GetMax()
 	if item == nil {
-		return nil, status.Errorf(codes.Internal, "Filter failed to retrieve max item")
+		return nil, status.Errorf(codes.Internal,
+			"Filter failed to retrieve max item")
 	}
 
 	return item, status.Errorf(codes.OK, "Max item retrieved")
@@ -86,7 +87,8 @@ func (s *CDSFApp) GetMin() (*filter.FilterItem, error) {
 
 	item := s.heap.GetMin()
 	if item == nil {
-		return nil, status.Errorf(codes.Internal, "Filter failed to retrieve min item")
+		return nil, status.Errorf(codes.Internal,
+			"Filter failed to retrieve min item")
 	}
 
 	return item, status.Errorf(codes.OK, "Min item retrieved")
@@ -99,7 +101,8 @@ func (s *CDSFApp) RemoveMax() (*filter.FilterItem, error) {
 
 	item := s.heap.RemoveMax()
 	if item == nil {
-		return nil, status.Errorf(codes.Internal, "Filter failed to remove max item")
+		return nil, status.Errorf(codes.Internal,
+			"Filter failed to remove max item")
 	}
 
 	return item, status.Errorf(codes.OK, "Max item removed")
@@ -112,7 +115,8 @@ func (s *CDSFApp) RemoveMin() (*filter.FilterItem, error) {
 
 	item := s.heap.RemoveMin()
 	if item == nil {
-		return nil, status.Errorf(codes.Internal, "Filter failed to remove min item")
+		return nil, status.Errorf(codes.Internal,
+			"Filter failed to remove min item")
 	}
 
 	return item, status.Errorf(codes.OK, "Min item removed")

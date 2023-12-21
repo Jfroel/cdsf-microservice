@@ -5,14 +5,14 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
-	"strconv"
-	"strings"
 	"time"
 
 	"google.golang.org/grpc"
 )
 
-func UnaryClientInterceptor(ctx context.Context, method string, req, reply interface{}, cc *grpc.ClientConn, invoker grpc.UnaryInvoker, opts ...grpc.CallOption) (err error) {
+func UnaryClientInterceptor(ctx context.Context, method string, req,
+	reply interface{}, cc *grpc.ClientConn, invoker grpc.UnaryInvoker,
+	opts ...grpc.CallOption) (err error) {
 	start := time.Now()
 	defer func() {
 		in, _ := json.Marshal(req)
@@ -25,7 +25,9 @@ func UnaryClientInterceptor(ctx context.Context, method string, req, reply inter
 		if err == nil {
 			errStr = "<nil>"
 		}
-		logMessage := fmt.Sprintf("grpc%s%s%s%s%s%s%s%s%s%d", delimiter, method, delimiter, inStr, delimiter, outStr, delimiter, errStr, delimiter, duration)
+		logMessage := fmt.Sprintf("grpc%s%s%s%s%s%s%s%s%s%d", delimiter, method,
+			delimiter, inStr, delimiter, outStr, delimiter, errStr, delimiter,
+			duration)
 		log.Println(logMessage)
 
 	}()
@@ -37,11 +39,13 @@ func logMsg(handler, inStr, outStr, errStr string, duration int64) {
 	delimiter := ";"
 
 	// Log the entire time it takes to execute
-	logMessage := fmt.Sprintf("%s%s%s%s%s%s%s%s%d", handler, delimiter, inStr, delimiter, outStr, delimiter, errStr, delimiter, duration)
+	logMessage := fmt.Sprintf("%s%s%s%s%s%s%s%s%d", handler, delimiter, inStr,
+		delimiter, outStr, delimiter, errStr, delimiter, duration)
 	log.Println(logMessage)
 }
 
-// dial creates a new gRPC client connection to the specified address and returns a client connection object.
+// dial creates a new gRPC client connection to the specified address and
+// returns a client connection object.
 func dial(addr string) *grpc.ClientConn {
 	// Define gRPC dial options for the client connection.
 
@@ -51,10 +55,12 @@ func dial(addr string) *grpc.ClientConn {
 		grpc.WithUnaryInterceptor(UnaryClientInterceptor),
 	}
 
-	// Create a new gRPC client connection to the specified address using the dial options.
+	// Create a new gRPC client connection to the specified address using the
+	// dial options.
 	conn, err := grpc.Dial(addr, opts...)
 	if err != nil {
-		// If there was an error creating the client connection, panic with an error message.
+		// If there was an error creating the client connection, panic with an
+		// error message.
 		panic(fmt.Sprintf("ERROR: dial error: %v", err))
 	}
 
