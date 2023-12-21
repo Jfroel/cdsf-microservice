@@ -1,0 +1,63 @@
+syntax = "proto3";
+option go_package = "./proto/filter";
+
+package filter;
+
+message FilterItem {
+  float score = 1;  // [0, 1] 0% to 100% 
+  bytes data = 2;
+}
+
+message InsertItemRequest {
+  FilterItem item = 1;
+}
+
+message InsertItemResponse {
+  bool success = 1;
+}
+
+message GetMaxItemRequest {}
+
+message GetMaxItemResponse   {
+  FilterItem item = 1;
+}
+
+message GetMinItemRequest {}
+
+message GetMinItemResponse   {
+  FilterItem item = 1;
+}
+
+message RemoveMaxItemRequest {}
+
+message RemoveMaxItemResponse {
+  FilterItem item = 1;
+}
+
+message RemoveMinItemRequest {}
+
+message RemoveMinItemResponse {
+  FilterItem item = 1;
+}
+
+message GetSizeRequest {}
+
+message GetSizeResponse {
+  int32 size = 1;
+}
+
+message ClearRequest {}
+
+message ClearResponse {
+  bool success = 1;
+}
+
+service FilterService {
+  rpc InsertItem(InsertItemRequest) returns (InsertItemResponse) {}
+  rpc GetMaxItem(GetMaxItemRequest) returns (GetMaxItemResponse) {}
+  rpc GetMinItem(GetMinItemRequest) returns (GetMinItemResponse) {}
+  rpc RemoveMaxItem(RemoveMaxItemRequest) returns (RemoveMaxItemResponse) {}
+  rpc RemoveMinItem(RemoveMinItemRequest) returns (RemoveMinItemResponse) {}
+  rpc GetSize(GetSizeRequest) returns (GetSizeResponse) {}
+  rpc Clear(ClearRequest) returns (ClearResponse) {}
+}

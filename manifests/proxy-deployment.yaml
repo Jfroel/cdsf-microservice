@@ -1,0 +1,61 @@
+##################################################################################################
+# Proxy services and deployment
+##################################################################################################
+
+# Defining a Kubernetes Service for the proxy application.
+apiVersion: v1
+kind: Service
+metadata:
+  name: proxy  # Name of the Service resource
+  labels:
+    app: proxy  # Label to identify the application
+    service: proxy
+spec:
+  clusterIP: 10.96.88.88  # Assign a fixed IP address to access the service within the cluster
+  ports:
+  - port: 9090  # Port number to expose the service
+    name: http   # Name for the port, commonly used as an identifier
+  selector:
+    app: proxy  # Selecting pods with this label to route traffic to
+
+---
+
+# Defining a ServiceAccount for the proxy application.
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: cdsf-proxy  # Name of the ServiceAccount resource
+  labels:
+    account: proxy  # Label to identify the service account
+
+---
+
+# Defining a Kubernetes Deployment for the proxy application.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: proxy  # Name of the Deployment resource
+  labels:
+    app: proxy  # Label to identify the application
+spec:
+  replicas: 1  # Number of desired pod replicas for this deployment
+  selector:
+    matchLabels:
+      app: proxy  # Selecting pods with this label to manage
+  template:
+    metadata:
+      labels:
+        app: proxy  # Labels applied to the pods created by this template
+    spec:
+      serviceAccountName: cdsf-proxy  # Using the specified ServiceAccount
+      imagePullSecrets:
+      - name: regcred  # Name of the secret used for pulling the Docker image
+      containers:
+      - name: proxy  # Name of the container
+        image: jamesfroelich/restaurant_microservice:cdsf-microservice
+        command: ["/app/cdsf-microservice"]  # Command to run within the container
+        args: ["proxy"]  # Arguments passed to the command line in main.go, used to specify server
+        imagePullPolicy: Always  # Policy for pulling the container image (Always in this case)
+        ports:
+        - containerPort: 9090  # Port exposed by the container
+---

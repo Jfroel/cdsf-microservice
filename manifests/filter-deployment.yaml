@@ -1,0 +1,59 @@
+##################################################################################################
+# filter service and deployment
+##################################################################################################
+apiVersion: v1
+kind: Service
+metadata:
+  name: filter
+  labels:
+    app: filter
+    service: filter
+spec:
+  ports:
+  - port: 9091
+    name: grpc
+  selector:
+    app: filter
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: cdsf-filter
+  labels:
+    account: filter
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: filter
+  labels:
+    app: filter
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: filter
+  template:
+    metadata:
+      labels:
+        app: filter
+    spec:
+      serviceAccountName: cdsf-filter
+      imagePullSecrets:
+      - name: regcred
+      containers:
+      - name: filter
+        image: jamesfroelich/restaurant_microservice:cdsf-microservice
+        command: ["/app/cdsf-microservice"]
+        args: ["filter"]
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 9091
+        resources:
+          limits:
+            cpu: "8"
+          requests:
+            cpu: "7"
+        # args:
+        # - -cpus
+        # - "8"
