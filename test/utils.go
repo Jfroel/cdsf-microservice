@@ -19,8 +19,10 @@ var (
 func heapCtor(cap int) apps.MaxMinHeap {
 	if *HEAP == 0 {
 		return apps.NewCoarseRWMaxMinHeap(cap)
+	} else if *HEAP == 1 {
+		return apps.NewSubtreeLkMaxMinHeap(cap)
 	} else {
-		panic("subtree locking heap not yet implemented")
+		panic("heap not yet implemented")
 	}
 }
 

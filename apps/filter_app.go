@@ -46,7 +46,7 @@ func NewCDSFApp(lkType string, capacity int) *CDSFApp {
 		heap = NewCoarseRWMaxMinHeap(capacity)
 	case "subtree":
 		log.Println("locking policy: subtree")
-		panic("subtree locking not yet implemented")
+		heap = NewSubtreeLkMaxMinHeap(capacity)
 	default:
 		panic("bad arg to CDSF constructor")
 	}
